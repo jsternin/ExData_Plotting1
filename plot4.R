@@ -17,24 +17,22 @@ hpc_sub <- subset(hpc, (as.Date(Date,"%d/%m/%Y") == "2007-02-02") |
 ## Plot4.R
 ##
 par(mfrow=c(2,2))
-z <- 1:2880 # 2 days  by minute
+hpc_sub$Date <- as.Date(hpc_sub$Date, format="%d/%m/%Y")
+datetime <- paste(as.Date(hpc_sub$Date), hpc_sub$Time)
+hpc_sub$Datetime <- as.POSIXct(datetime)
 with(hpc_sub,{
   ## 1,1- Global Active power
-  plot(z ,Global_active_power,type = "l",ylab = "Global Active Power",xlab = "",xaxt="n")
-  axis(1,at=c(1,1440,2880),labels=c("Thu","Fri","Sat"))
+  plot(Global_active_power~Datetime,type = "l",ylab = "Global Active Power",xlab = "")
   ## 1,2 Voltge
-  plot(z ,Voltage, type = "l",ylab = "Voltage",xlab = "datetime",xaxt="n")
-  axis(1,at=c(1,1440,2880),labels=c("Thu","Fri","Sat"))
+  plot(Voltage~Datetime, type = "l",ylab = "Voltage",xlab = "datetime")
   ## 2,1 - Sub_metering
-  plot(z ,Sub_metering_1,type = "l",ylab = "Energy Sub Metering",xlab = "",xaxt="n",col="black")
-  points(z ,Sub_metering_2,type = "l",ylab = "Energy Sub Metering",xlab = "",xaxt="n",col="red")
-  points(z ,Sub_metering_3,type = "l",ylab = "Energy Sub Metering",xlab = "",xaxt="n",col="blue")
+  plot(Sub_metering_1~Datetime,type = "l",ylab = "Energy Sub Metering",xlab = "",col="black")
+  points(Sub_metering_2~Datetime,type = "l",ylab = "Energy Sub Metering",xlab = "",col="red")
+  points(Sub_metering_3~Datetime,type = "l",ylab = "Energy Sub Metering",xlab = "",col="blue")
   legend("topright",lty=1,col=c("black","red","blue"),border="",bty="n",legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
-  axis(1,at=c(1,1440,2880),labels=c("Thu","Fri","Sat"))
   ## 2,2 Global reactive power
-  plot(z ,Global_reactive_power,type = "l",ylab = "Global Reactive Power",xlab = "datetime",xaxt="n")
-  axis(1,at=c(1,1440,2880),labels=c("Thu","Fri","Sat"))
-})
+  plot(Global_reactive_power~Datetime,type = "l",ylab = "Global Reactive Power",xlab = "datetime")
+  })
 par(mfrow=c(1,1))
 dev.copy(png,file="plot4.png")
 dev.off()
