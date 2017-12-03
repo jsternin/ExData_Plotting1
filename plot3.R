@@ -15,12 +15,13 @@ hpc_sub <- subset(hpc, (as.Date(Date,"%d/%m/%Y") == "2007-02-02") |
 ## Plot3.R
 ##
 ##par(lwd=2)
-z <- 1:2880 # 2 days  by minute
-with(hpc_sub,plot(z ,Sub_metering_1,type = "l",ylab = "Energy Sub Metering",xlab = "",xaxt="n",col="black"))
-with(hpc_sub,points(z ,Sub_metering_2,type = "l",ylab = "Energy Sub Metering",xlab = "",xaxt="n",col="red"))
-with(hpc_sub,points(z ,Sub_metering_3,type = "l",ylab = "Energy Sub Metering",xlab = "",xaxt="n",col="blue"))
+hpc_sub$Date <- as.Date(hpc_sub$Date, format="%d/%m/%Y")
+datetime <- paste(as.Date(hpc_sub$Date), hpc_sub$Time)
+hpc_sub$Datetime <- as.POSIXct(datetime)
+with(hpc_sub,plot(Sub_metering_1 ~Datetime,type = "l",ylab = "Energy Sub Metering",xlab = "",col="black"))
+with(hpc_sub,points(Sub_metering_2 ~Datetime,type = "l",ylab = "Energy Sub Metering",xlab = "",col="red"))
+with(hpc_sub,points(Sub_metering_3 ~Datetime,type = "l",ylab = "Energy Sub Metering",xlab = "",col="blue"))
 legend("topright",lty=1,col=c("black","red","blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
-axis(1,at=c(1,1440,2880),labels=c("Thu","Fri","Sat"))
 par(lwd=1)
 dev.copy(png,file="plot3.png")
 dev.off()
